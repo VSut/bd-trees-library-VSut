@@ -1,6 +1,8 @@
 import org.apache.commons.lang3.NotImplementedException;
 import treestructure.BookNode;
 
+import java.util.Stack;
+
 /**
  * Application to test traversing Binary Trees and Binary Search Trees.
  *
@@ -35,8 +37,20 @@ public class LibraryService {
      */
     public boolean isBookInLibraryByIsbn(String isbn) {
         // PARTICIPANTS: IMPLEMENT YOUR BINARY SEARCH HERE
-
-        throw new NotImplementedException("isBookInLibraryByIsbn is not yet implemented!");
+        if (isbn == null || isbn.isBlank()) {
+            return false;
+        }
+        BookNode current = books;
+        while (current != null) {
+            if (current.getBook().getIsbn().equals(isbn)) {
+                return true;
+            } else if (current.getBook().getIsbn().compareTo(isbn) > 0) {
+                current = current.getLeft();
+            } else {
+                current = current.getRight();
+            }
+        }
+        return false;
     }
 
 
@@ -51,7 +65,20 @@ public class LibraryService {
      */
     public boolean isBookInLibraryByTitleAndAuthor(String title, String author) {
         // PARTICIPANTS: IMPLEMENT YOUR DEPTH FIRST SEARCH HERE
-
-        throw new NotImplementedException("isBookInLibraryByTitleAndAuthor is not yet implemented!");
+        Stack<BookNode> stack = new Stack<>();
+        stack.push(books);
+        while (!stack.isEmpty()) {
+            BookNode current = stack.pop();
+            if (current.getBook().getTitle().equals(title) && current.getBook().getAuthor().equals(author)) {
+                return true;
+            }
+            if (current.getRight() != null) {
+                stack.push(current.getRight());
+            }
+            if (current.getLeft() != null) {
+                stack.push(current.getLeft());
+            }
+        }
+        return false;
     }
 }
